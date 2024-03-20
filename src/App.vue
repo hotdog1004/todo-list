@@ -1,34 +1,37 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import { ref, type Ref } from 'vue'
+
+const message = ref('')
+const todos: Ref<string[]> = ref([])
+const addTodo = (inputValue: string) => {
+  todos.value.push(inputValue)
+  message.value = ''
+}
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+      <HelloWorld msg="TODO LIST" />
     </div>
   </header>
-
-  <RouterView />
+  <div>
+    <p>{{ message }}</p>
+    <input type="text" v-model="message" />
+    <button @click="addTodo(message)">추가</button>
+  </div>
+  <h2>my todo list</h2>
+  <p v-if="todos.length === 0">todo list가 없습니다.</p>
+  <ul v-else>
+    <li v-for="todo in todos" v-bind:key="todo">{{ todo }}</li>
+  </ul>
 </template>
 
 <style scoped>
 header {
   line-height: 1.5;
   max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
 }
 
 nav {
